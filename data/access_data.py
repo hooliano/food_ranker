@@ -35,3 +35,34 @@ class FoodList:
     def get_entry_nutrient_score(self, index: int, nutrient: str) -> int:
         return self.food_list[index]['Data'][nutrient]
     
+    def get_fat_dict(self, index: int, datapoint: str = ""):
+        if not datapoint:
+            return self.food_list[index]['Data']['Fat']
+        else:
+            return self.food_list[index]['Data']['Fat'][datapoint]
+    
+    def get_vitamins_dict(self, index: int, datapoint: str = ""):
+        if not datapoint:
+            return self.food_list[index]['Data']['Vitamins']
+        else:
+            return self.food_list[index]['Data']['Vitamins'][datapoint]
+    
+    # LIST GETTERS
+    def get_score_list(self, index: int) -> list:
+        score_list: list = []
+        data_dict: dict = self.get_entry_data_dict(index)
+
+        for value in data_dict.values():
+            if type(value) == dict:
+                for subs in value.values():
+                    score_list.append(subs)
+            else:
+                score_list.append(value)
+        
+        return score_list
+    
+    def get_score_list_per_category(self, category: str) -> list:
+        all_scores: list = []
+        
+        for dictionary in self.food_list:
+            all_scores.append((dictionary['Category'],dictionary['Data'][category]))
