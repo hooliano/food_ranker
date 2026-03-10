@@ -61,8 +61,16 @@ class FoodList:
         
         return score_list
     
-    def get_score_list_per_category(self, category: str) -> list:
+    def get_score_list_per_category(self, category: str, size = 0) -> list:
         all_scores: list = []
+
+        if size > 0:
+            for i in range(size):
+                all_scores.append((self.get_entry_category(i), self.get_entry_nutrient_score(i, category)))
+            
+            return all_scores
         
         for dictionary in self.food_list:
             all_scores.append((dictionary['Category'],dictionary['Data'][category]))
+        
+        return all_scores
