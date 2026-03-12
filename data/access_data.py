@@ -61,16 +61,25 @@ class FoodList:
         
         return score_list
     
-    def get_score_list_per_category(self, category: str, size = 0) -> list:
+    def get_score_list_per_category(self, category: str, subcategory = "", size = 0) -> list:
         all_scores: list = []
 
         if size > 0:
             for i in range(size):
-                all_scores.append((self.get_entry_category(i), self.get_entry_nutrient_score(i, category)))
+                if not subcategory:
+                    all_scores.append((self.get_entry_category(i), self.get_entry_nutrient_score(i, category)))
+                else:
+                    if category == 'Fat':
+                        all_scores.append((self.get_entry_category(i), self.get_entry_description(i), self.get_fat_dict(i, subcategory)))
+                    else:
+                        all_scores.append((self.get_entry_category(i), self.get_entry_description(i), self.get_vitamins_dict(i, subcategory)))
             
             return all_scores
         
         for dictionary in self.food_list:
-            all_scores.append((dictionary['Category'],dictionary['Data'][category]))
+            if not subcategory:
+                all_scores.append((dictionary['Category'], dictionary['Description'], dictionary['Data'][category]))
+            else:
+                all_scores.append((dictionary['Category'], dictionary['Description'], dictionary['Data'][category][subcategory]))
         
         return all_scores
