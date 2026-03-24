@@ -1,4 +1,5 @@
-from . import food
+import food
+
 
 class FoodList:
     food_list: list = []
