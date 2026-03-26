@@ -1,8 +1,8 @@
 import pygame,sys
-from constants import *
-from access_data import *
-from heap_sort import *
-from merge_sort import *
+from .constants import *
+from pathlib import Path
+from data import access_data
+from sorting_algos import *
 
 
 pygame.init()
@@ -11,14 +11,19 @@ pygame.font.init()
 class FoodRanker:
     def __init__(self):
         # INITIALIZE DATA
-        self.food_bank = FoodList()
+        self.food_bank = access_data.FoodList()
 
         # SCREEN SETUP
         self.WIN = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("Customizable Food Ranker")
 
         # FONTS
-        self.base_font = pygame.font.Font('baguet-script-regular.otf', 32)
+        font_path = Path(__file__).resolve().parent / "baguet-script-regular.otf"
+        if font_path.exists():
+            self.base_font = pygame.font.Font(str(font_path), 32)
+        else:
+            self.base_font = pygame.font.SysFont("georgia", 32)
+
         self.user_font = pygame.font.SysFont('georgia', 20)
         self.result_font = pygame.font.SysFont('georgia', 20)
 
