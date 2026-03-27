@@ -1,7 +1,7 @@
-import pygame
-
 WIDTH, HEIGHT = 1200, 650
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+BLUE = (0, 100, 255)
+GREY = (200, 200, 200)
 FPS = 60
 
