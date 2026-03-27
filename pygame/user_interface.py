@@ -41,7 +41,7 @@ class FoodRanker:
 
         # NUTRITION MENU
         nutrients_available = ['Alpha Carotene', 'Beta Carotene', 'Beta Cryptoxanthin', 'Carbohydrate', 'Cholesterol', 'Choline', 'Fiber', 'Lutein and Zeaxanthin', 'Lycopene', 'Niacin', 'Protein', 'Retinol', 'Riboflavin', 'Selenium', 'Sugar Total', 'Thiamin', 'Water', 'Fat', 'Monosaturated Fat', 'Polysaturated Fat', 'Saturated Fat', 'Total Lipid', 'Major Minerals', 'Calcium', 'Copper', 'Iron', 'Magnesium', 'Phosphorus', 'Potassium', 'Sodium', 'Zinc', 'Vitamins', 'Vitamin A - RAE', 'Vitamin B12', 'Vitamin B6', 'Vitamin C', 'Vitamin E', 'Vitamin K']
-        self.nutrient_menu = MultiSelectMenu(50, 340, 200, 40, nutrients_available)
+        self.nutrient_menu = MultiSelectMenu(50, 340, 250, 40, nutrients_available)
 
         # SEARCH BUTTON
         self.search_btn_rect = pygame.Rect(150, HEIGHT- 90, 120, 40)
@@ -177,6 +177,10 @@ class FoodRanker:
                         self.scroll_y = min(0, self.scroll_y + self.scroll_speed)
                     if event.button == 5: # scroll down
                         self.scroll_y -= self.scroll_speed
+
+                if event.type == pygame.MOUSEMOTION and event.buttons[0]:
+                    self.scroll_y += event.rel[1]
+
             self.draw_window()
 
         pygame.quit()
