@@ -83,16 +83,13 @@ class FoodRanker:
         final_matches = temp_results[:limit+1]
         self.results = [item['Description'] for item in final_matches]
         self.scroll_y = 0
-
+    '''
     def heap_sort(self):
         self.food_bank = FoodList()
 
     def merge_sort(self):
         self.food_bank = FoodList()
-
-    def list_size(self):
-        self.food_bank = FoodList()
-
+    '''
     def draw_window(self):
         self.WIN.fill(WHITE)
 
@@ -149,15 +146,7 @@ class FoodRanker:
                 # INPUT
                 for box in self.inputs:
                     box.handle_event(event)
-                '''
-                for i, box in enumerate(self.inputs):
-                    if i == 1:
-                        if event.type == pygame.KEYDOWN:
-                            if event.key == pygame.K_BACKSPACE or event.unicode.isdigit():
-                                box.handle_event(event)
-                    else:
-                        box.handle_event(event)
-                '''
+
                 self.nutrient_menu.handle_event(event)
 
                 # SORT

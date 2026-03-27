@@ -120,14 +120,3 @@ class FoodList:
             final_list[val][2] /= list_size
         
         return final_list
-'''
-F = FoodList()
-lis = []
-for i in range(F.get_list_size()):
-    if F.get_entry(i) not in lis:
-        lis.append(F.get_entry(i))
-print(lis)
-print(len(lis))
-
-['Alpha Carotene', 'Beta Carotene', 'Beta Cryptoxanthin', 'Carbohydrate', 'Cholesterol', 'Choline', 'Fiber', 'Lutein and Zeaxanthin', 'Lycopene', 'Niacin', 'Protein', 'Retinol', 'Riboflavin', 'Selenium', 'Sugar Total', 'Thiamin', 'Water', 'Fat', 'Monosaturated Fat', 'Polysaturated Fat', 'Saturated Fat', 'Total Lipid', 'Major Minerals', 'Calcium', 'Copper', 'Iron', 'Magnesium', 'Phosphorus', 'Potassium', 'Sodium', 'Zinc', 'Vitamins', 'Vitamin A - RAE', 'Vitamin B12', 'Vitamin B6', 'Vitamin C', 'Vitamin E', 'Vitamin K']
-'''
