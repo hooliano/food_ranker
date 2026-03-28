@@ -111,6 +111,7 @@ class MultiSelectMenu:
             WIN.set_clip(None)
 
     def handle_event(self, event):
+
         if event.type == pygame.MOUSEBUTTONDOWN:
             
             if event.button != 1:
@@ -138,25 +139,15 @@ class MultiSelectMenu:
 
         # MOVING WITH MOUSE
         elif event.type == pygame.MOUSEWHEEL and self.is_open:
-            self.scroll_y += event.y * 15
-            max_scroll = -(len(self.options) * self.option_height - self.dropdown_rect.h)
-            if self.scroll_y > 0: self.scroll_y = 0
-            if self.scroll_y < max_scroll: self.scroll_y = max_scroll
-
-        # MOVING WITH FINGER
-        elif event.type == pygame.MOUSEMOTION:
-            if self.is_dragging and self.is_open:
-                delta_y = event.pos[1] - self.last_mouse_y
-                self.scroll_y += delta_y
-                self.last_mouse_y = event.pos[1]
-
+            if self.dropdown_rect.collidepoint(pygame.mouse.get_pos()):
+                self.scroll_y += event.y * 15
                 max_scroll = -(len(self.options) * self.option_height - self.dropdown_rect.h)
                 if self.scroll_y > 0: self.scroll_y = 0
-                if len(self.options) * self.option_height > self.dropdown_rect.h:
-                    if self.scroll_y < max_scroll: self.scroll_y = max_scroll
-                else:
-                    self.scroll_y = 0
+                if self.scroll_y < max_scroll: self.scroll_y = max_scroll
 
         #
         elif event.type == pygame.MOUSEBUTTONUP:
                 self.is_dragging = False
+        
+    def get_selected(self):
+        return self.selected
