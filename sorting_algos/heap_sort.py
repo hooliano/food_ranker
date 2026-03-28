@@ -1,44 +1,44 @@
-def heap_sort(food_list):
-    i = int(len(food_list) / 2)
+def heap_sort(food_bank):
+    i = int(len(food_bank) / 2)
     while i >= 0:
-        food_list = heapify_down(food_list, i, len(food_list))
+        food_bank = heapify_down(food_bank, i, len(food_bank))
         i -= 1
 
-    i = len(food_list) - 1
+    i = len(food_bank) - 1
 
     while i > 0:
-        temp = food_list[i]
-        food_list[i] = food_list[0]
-        food_list[0] = temp
-        food_list = heapify_down(food_list, 0, i)
+        temp = food_bank[i]
+        food_bank[i] = food_bank[0]
+        food_bank[0] = temp
+        food_bank = heapify_down(food_bank, 0, i)
         i -= 1
 
     
-    return food_list
+    return food_bank
 
 
-def heapify_down(food_list, i, list_size):
+def heapify_down(food_bank, i, list_size):
 
     left = 2*i + 1
     right = 2*i + 2
     max_index = i
 
-    if (left < list_size and food_list[left] > food_list[max_index]):
+    if (left < list_size and food_bank[left][2] > food_bank[max_index][2]):
         max_index = left
-    if (right < list_size and food_list[right] > food_list[max_index]):
+    if (right < list_size and food_bank[right][2] > food_bank[max_index][2]):
         max_index = right
     
-    temp = food_list[i]
-    food_list[i] = food_list[max_index]
-    food_list[max_index] = temp
+    temp = food_bank[i]
+    food_bank[i] = food_bank[max_index]
+    food_bank[max_index] = temp
 
     if (i != max_index):
-        food_list = heapify_down(food_list, max_index, list_size)
+        food_bank = heapify_down(food_bank, max_index, list_size)
     
-    return food_list
+    return food_bank
 
 
 if __name__ == "__main__":
-    food_list = [32, 17, 81, 43, 62, 1, 28]
-    food_list = heap_sort(food_list)
-    print(food_list)
+    food_bank = [32, 17, 81, 43, 62, 1, 28]
+    food_bank = heap_sort(food_bank)
+    print(food_bank)

@@ -59,7 +59,7 @@ class FoodRanker:
         try:
             limit = int(self.inputs[0].text)
         except ValueError:
-            # default size 10
+            print("Invalid list size input. Default set to 10.")
             limit = 10
 
         self.results = []
@@ -81,7 +81,7 @@ class FoodRanker:
             self.results = self.merge_sort()
         '''
         # limit the results to size
-        final_matches = temp_results[:limit+1]
+        final_matches = temp_results[-limit:]
         self.results = [item['Description'] for item in final_matches]
         self.scroll_y = 0
     '''
