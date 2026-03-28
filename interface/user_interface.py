@@ -43,7 +43,7 @@ class FoodRanker:
         self.current_sort = 'Heap Sort'
 
         # NUTRITION MENU
-        nutrients_available = ['Alpha Carotene', 'Beta Carotene', 'Beta Cryptoxanthin', 'Carbohydrate', 'Cholesterol', 'Choline', 'Fiber', 'Lutein and Zeaxanthin', 'Lycopene', 'Niacin', 'Protein', 'Retinol', 'Riboflavin', 'Selenium', 'Sugar Total', 'Thiamin', 'Water', 'Fat', 'Monosaturated Fat', 'Polysaturated Fat', 'Saturated Fat', 'Total Lipid', 'Major Minerals', 'Calcium', 'Copper', 'Iron', 'Magnesium', 'Phosphorus', 'Potassium', 'Sodium', 'Zinc', 'Vitamins', 'Vitamin A - RAE', 'Vitamin B12', 'Vitamin B6', 'Vitamin C', 'Vitamin E', 'Vitamin K']
+        nutrients_available = ['Alpha Carotene', 'Beta Carotene', 'Beta Cryptoxanthin', 'Carbohydrate', 'Cholesterol', 'Choline', 'Fiber', 'Lutein and Zeaxanthin', 'Lycopene', 'Niacin', 'Protein', 'Retinol', 'Riboflavin', 'Selenium', 'Sugar Total', 'Thiamin', 'Water', 'Monosaturated Fat', 'Polysaturated Fat', 'Saturated Fat', 'Total Lipid', 'Calcium', 'Copper', 'Iron', 'Magnesium', 'Phosphorus', 'Potassium', 'Sodium', 'Zinc', 'Vitamin A - RAE', 'Vitamin B12', 'Vitamin B6', 'Vitamin C', 'Vitamin E', 'Vitamin K']
         self.nutrient_menu = MultiSelectMenu(175, 130, 170, 30, nutrients_available)
 
         # SEARCH BUTTON

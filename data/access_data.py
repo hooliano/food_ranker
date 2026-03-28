@@ -88,17 +88,22 @@ class FoodList:
     
     def _get_list_from_categorizer(self, category: str, size: int = 0):
 
+        mineral_categories = ['Calcium', 'Copper', 'Iron', 'Magnesium', 'Phosphorus', 'Potassium', 'Sodium', 'Zinc']
+
+        if category in mineral_categories:
+            return self.get_score_list_per_category("Major Minerals", category, size)
+
         if size > 0:
             if "Vitamin" in category:
                 return self.get_score_list_per_category("Vitamins", category, size)
-            elif "Fat" in category:
+            elif "Fat" in category or category == "Total Lipid":
                 return self.get_score_list_per_category("Fat", category, size)
             else:
                 return self.get_score_list_per_category(category, size=size)
 
         if "Vitamin" in category:
             return self.get_score_list_per_category("Vitamins", category)
-        elif "Fat" in category:
+        elif "Fat" in category or category == "Total Lipid":
             return self.get_score_list_per_category("Fat", category)
         else:
             return self.get_score_list_per_category(category)
