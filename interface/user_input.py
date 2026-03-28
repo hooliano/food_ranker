@@ -1,5 +1,5 @@
 import pygame
-from constants import *
+from interface.constants import *
 
 
 class TextInput:
@@ -12,12 +12,15 @@ class TextInput:
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             self.active = self.rect.collidepoint(event.pos)
-            self.color = pygame.Color('dodgerblue2') if self.active else pygame.Color('lightskyblue3')
+            if self.active:
+                self.color = pygame.Color('dodgerblue2') 
+            else:
+                self.color = pygame.Color('lightskyblue3')
 
         if event.type == pygame.KEYDOWN and self.active:
             if event.key == pygame.K_BACKSPACE:
-                self.text = self.text[:-1]
-            elif len(self.text) < 15:
+                    self.text = self.text[:-1]
+            elif len(self.text) < 15 and event.unicode.isdigit():
                 self.text += event.unicode
 
     def draw(self, WIN, font):
@@ -76,7 +79,7 @@ class MultiSelectMenu:
         if not self.selected:
             display_text = 'Select Nutrients...'
         if font.size(display_text)[0] > self.rect.w - 30:
-            display_text = display_text[:20] + '...'
+            display_text = display_text[:25] + '...'
 
         text_surf = font.render(display_text, True, (50, 50, 50))
         WIN.blit(text_surf, (self.rect.x + 5, self.rect.y + (self.rect.h - text_surf.get_height())//2))
@@ -109,6 +112,10 @@ class MultiSelectMenu:
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
+            
+            if event.button != 1:
+                return
+
             if self.rect.collidepoint(event.pos):
                 self.is_open = not self.is_open
                 return

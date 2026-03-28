@@ -1,12 +1,13 @@
 import pygame,sys
-from access_data import *
-from user_input import *
-from heap_sort import *
-from merge_sort import *
+from data.access_data import *
+from interface.user_input import *
+from sorting_algos.heap_sort import *
+from sorting_algos.merge_sort import *
 
 
 pygame.init()
 pygame.font.init()
+pygame.key.set_repeat(300, 50)
 
 class FoodRanker:
     def __init__(self):
@@ -19,15 +20,15 @@ class FoodRanker:
         pygame.display.set_caption("Customizable Food Ranker")
 
         # FONTS
-        self.title_font = pygame.font.Font('baguet-script-regular.otf', 32)
+        self.title_font = pygame.font.Font('interface/baguet-script-regular.otf', 32)
         self.base_font = pygame.font.SysFont('georgia', 20)
+        self.category_font = pygame.font.SysFont('georgia', 12)
 
         # INPUT
         self.inputs = [
-            TextInput(175, 130, 170, 30),
             TextInput(175, 200, 170, 30,)
         ]
-        self.inputs[1].text = '10'
+        self.inputs[0].text = '10'
         self.color_active = pygame.Color('lightskyblue3')
         self.color_passive = pygame.Color('dodgerblue4')
 
@@ -41,7 +42,7 @@ class FoodRanker:
 
         # NUTRITION MENU
         nutrients_available = ['Alpha Carotene', 'Beta Carotene', 'Beta Cryptoxanthin', 'Carbohydrate', 'Cholesterol', 'Choline', 'Fiber', 'Lutein and Zeaxanthin', 'Lycopene', 'Niacin', 'Protein', 'Retinol', 'Riboflavin', 'Selenium', 'Sugar Total', 'Thiamin', 'Water', 'Fat', 'Monosaturated Fat', 'Polysaturated Fat', 'Saturated Fat', 'Total Lipid', 'Major Minerals', 'Calcium', 'Copper', 'Iron', 'Magnesium', 'Phosphorus', 'Potassium', 'Sodium', 'Zinc', 'Vitamins', 'Vitamin A - RAE', 'Vitamin B12', 'Vitamin B6', 'Vitamin C', 'Vitamin E', 'Vitamin K']
-        self.nutrient_menu = MultiSelectMenu(50, 340, 250, 40, nutrients_available)
+        self.nutrient_menu = MultiSelectMenu(175, 130, 170, 30, nutrients_available)
 
         # SEARCH BUTTON
         self.search_btn_rect = pygame.Rect(150, HEIGHT- 90, 120, 40)
@@ -56,7 +57,7 @@ class FoodRanker:
         query = self.inputs[0].text.lower()
 
         try:
-            limit = int(self.inputs[1].text)
+            limit = int(self.inputs[0].text)
         except ValueError:
             # default size 10
             limit = 10
@@ -125,7 +126,7 @@ class FoodRanker:
             btn.draw(self.WIN, self.base_font)
 
         # NUTRITION MENU
-        self.nutrient_menu.draw(self.WIN, self.base_font)
+        self.nutrient_menu.draw(self.WIN, self.category_font)
 
         # SEARCH BUTTON
         pygame.draw.rect(self.WIN, self.btn_color, self.search_btn_rect, border_radius=5)
