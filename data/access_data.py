@@ -1,4 +1,4 @@
-import food
+import data.food as food
 
 class FoodList:
     food_list: list = []

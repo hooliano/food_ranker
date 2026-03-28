@@ -22,7 +22,7 @@ def merge_sort(food_list):
     k = 0
     
     while (i < len(list1) and k < len(list2)):
-        if list1[i] <= list2[k]:
+        if list1[i][2] <= list2[k][2]:
             food_list[j] = list1[i]
             i += 1
         else:
