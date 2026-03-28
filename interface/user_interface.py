@@ -1,4 +1,6 @@
 import pygame,sys
+import math
+import time
 from data.access_data import *
 from interface.user_input import *
 from sorting_algos.heap_sort import *
@@ -52,45 +54,68 @@ class FoodRanker:
         self.results = []
         self.scroll_y = 0
         self.scroll_speed = 25
+        self.heap_sort_time = 0.0
+        self.merge_sort_time = 0.0
 
     def perform_search(self):
-        query = self.inputs[0].text.lower()
-
         try:
             limit = int(self.inputs[0].text)
         except ValueError:
             print("Invalid list size input. Default set to 10.")
             limit = 10
 
-        self.results = []
-        if query == '': return
+        if len(self.nutrient_menu.get_selected()) == 0:
+            self.results = ["Please select at least one category."]
+            self.heap_sort_time = 0.0
+            self.merge_sort_time = 0.0
+            self.scroll_y = 0
+            return
+        
+        category_list = self.nutrient_menu.get_selected()
 
-        # Collect all matches
+        unsorted_results = self.food_bank.get_score_list_average_from_list(category_list)
+
+        heapSortTime = 0
+        mergeSortTime = 0
+
         temp_results = []
-        for i in range(self.food_bank.get_list_size()):
-            category = self.food_bank.get_entry_category(i).lower()
-            description = self.food_bank.get_entry_description(i).lower()
-            if query in category:
-                temp_results.append(self.food_bank.get_entry(i))
-
-        # sorting
-        '''
         if self.current_sort == 'Heap Sort':
-            self.results = self.heap_sort()
-        elif self.current_sort == 'Merge Sort':
-            self.results = self.merge_sort()
-        '''
-        # limit the results to size
-        final_matches = temp_results[-limit:]
-        self.results = [item['Description'] for item in final_matches]
-        self.scroll_y = 0
-    '''
-    def heap_sort(self):
-        self.food_bank = FoodList()
+            heapFirstTime = time.perf_counter()
+            temp_results = heap_sort(unsorted_results)
+            heapSecondTime = time.perf_counter()
+            self.heap_sort_time = heapSecondTime - heapFirstTime
 
-    def merge_sort(self):
-        self.food_bank = FoodList()
-    '''
+            mergeFirstTime = time.perf_counter()
+            ignored_results = merge_sort(unsorted_results)
+            mergeSecondTime = time.perf_counter()
+            self.merge_sort_time = mergeSecondTime - mergeFirstTime
+
+        if self.current_sort == 'Merge Sort':
+            mergeFirstTime = time.perf_counter()
+            temp_results = merge_sort(unsorted_results)
+            mergeSecondTime = time.perf_counter()
+            self.merge_sort_time = mergeSecondTime - mergeFirstTime
+
+            heapFirstTime = time.perf_counter()
+            ignored_results = heap_sort(unsorted_results)
+            heapSecondTime = time.perf_counter()
+            self.heap_sort_time = heapSecondTime - heapFirstTime
+        
+        # limit the results to size
+        self.results.clear()
+        final_matches = temp_results[-limit:][::-1]
+        list_rank = 1
+        for food_item in final_matches:
+            case = 77
+            result_msg = f"{list_rank}. {food_item[1]} - Score: {math.trunc(food_item[2] * 100) / 100}"
+            if len(result_msg) > case:
+                result_msg = result_msg[:case] + '\n' + result_msg[case:]
+                case *= 2
+            for result_msgo in result_msg.split('\n'):
+                self.results.append(result_msgo)
+            list_rank += 1
+        self.scroll_y = 0
+
     def draw_window(self):
         self.WIN.fill(WHITE)
 
@@ -110,12 +135,16 @@ class FoodRanker:
 
         self.WIN.set_clip(results_area)
         for i, item_text in enumerate(self.results):
-            y_pos = results_area.y + (i*30) + self.scroll_y
-            if 100 < y_pos < HEIGHT - 100:
-                if len(item_text) > 80: item_text = item_text[:77] + '...'
-                item_surf = self.base_font.render(item_text, True, BLACK)
-                self.WIN.blit(item_surf, (results_area.x + 10, y_pos))
+            y_pos = results_area.y + (i*30) + self.scroll_y           
+            item_surf = self.base_font.render(item_text, True, BLACK)
+            self.WIN.blit(item_surf, (results_area.x + 10, y_pos))
         self.WIN.set_clip(None)
+
+        if (self.heap_sort_time > 0 and self.merge_sort_time > 0):
+            heap_time_text = self.base_font.render(f"  Heap Sort Time: {math.trunc(self.heap_sort_time * 1000000) / 1000000} seconds", True, BLACK)
+            merge_time_text = self.base_font.render(f"Merge Sort Time: {math.trunc(self.merge_sort_time * 1000000) / 1000000} seconds", True, BLACK)
+            self.WIN.blit(heap_time_text, (50, 340))
+            self.WIN.blit(merge_time_text, (50, 370))
 
         # INPUT BOX
         for box in self.inputs:
@@ -136,6 +165,7 @@ class FoodRanker:
         pygame.display.update()
 
     def main(self):
+        results_area = pygame.Rect(450, 100, WIDTH - 500, HEIGHT - 150)
         clock = pygame.time.Clock()
         run = True
         while run:
@@ -162,14 +192,21 @@ class FoodRanker:
                     if self.search_btn_rect.collidepoint(pygame.mouse.get_pos()):
                         self.perform_search()
 
-                    # SCROLL
-                    if event.button == 4: # scroll up
-                        self.scroll_y = min(0, self.scroll_y + self.scroll_speed)
-                    if event.button == 5: # scroll down
-                        self.scroll_y -= self.scroll_speed
+                    list_screen_size = 30 * len(self.results)
+                    if list_screen_size > results_area.height:
+                        max_scroll = (list_screen_size - results_area.height) * -1
+                        if max_scroll > self.scroll_y:
+                            self.scroll_y = max_scroll
+                    else:
+                        if event.button == 5:
+                            self.scroll_y = 0
 
-                if event.type == pygame.MOUSEMOTION and event.buttons[0]:
-                    self.scroll_y += event.rel[1]
+                    # SCROLL
+                    if results_area.collidepoint(pygame.mouse.get_pos()):
+                        if event.button == 4: # scroll up
+                            self.scroll_y = min(0, self.scroll_y + self.scroll_speed)
+                        if event.button == 5: # scroll down
+                            self.scroll_y -= self.scroll_speed
 
             self.draw_window()
 
